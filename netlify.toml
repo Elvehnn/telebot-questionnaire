@@ -1,0 +1,2 @@
+[template.environment]
+  AFEWQUESTION_BOT_TOKEN = "Telegram bot token here"
