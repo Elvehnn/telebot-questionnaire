@@ -1,15 +1,20 @@
-const Telegraf = require('telegraf')
-const Extra = require('telegraf/extra')
-const Markup = require('telegraf/markup')
+bot.start(ctx => {
+  console.log("Received /start command")
+  try {
+    return ctx.reply("Hi")
+  } catch (e) {
+    console.error("error in start action:", e)
+    return ctx.reply("Error occured")
+  }
+})
 
-const keyboard = Markup.inlineKeyboard([
-  Markup.urlButton('❤️', 'http://telegraf.js.org'),
-  Markup.callbackButton('Delete', 'delete')
-])
-
-const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
-bot.start((ctx) => ctx.reply('Hello'))
-bot.help((ctx) => ctx.reply('Help message'))
-bot.on('message', (ctx) => ctx.telegram.sendCopy(ctx.chat.id, ctx.message, Extra.markup(keyboard)))
-bot.action('delete', ({ deleteMessage }) => deleteMessage())
-bot.launch()
+// AWS event handler syntax (https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html)
+exports.handler = async event => {
+  try {
+    await bot.handleUpdate(JSON.parse(event.body))
+    return { statusCode: 200, body: "" }
+  } catch (e) {
+    console.error("error in handler:", e)
+    return { statusCode: 400, body: "This endpoint is meant for bot and telegram communication" }
+  }
+}
