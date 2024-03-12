@@ -15,7 +15,8 @@ bot.start(ctx => {
 exports.handler = async event => {
   try {
     console.log("Received an update from Telegram!", event.body);
-    return { statusCode: 200 };
+    await bot.handleUpdate(JSON.parse(event.body));
+    return { statusCode: 200, body: '' };
    
   } catch (e) {
     console.error("error in handler:", e)
